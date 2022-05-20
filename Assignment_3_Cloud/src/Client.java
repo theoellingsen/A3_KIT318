@@ -41,7 +41,7 @@ public class Client {
 					// Input from user
 					Thread sender = new Thread(new Runnable() {
 						String msg;
-						String priority;
+						int priority;
 
 						@Override
 						public void run() {
@@ -81,26 +81,51 @@ public class Client {
 
 										else if ("SubmitRequest".equalsIgnoreCase(line)) {
 											//TODO code for submit request.
+											int priority = 0;
 											System.out.println("Enter a string (future implementation will have text file path too) to be processed:");
 											msg = sc.nextLine();
-											
-											System.out.println("Enter a priority (1-10):");
-											priority = sc.nextLine();
-											
-											// sends message and priority to server
+											String input = msg;
 											StringBuffer sb = new StringBuffer();
 											sb.append("SubmitRequest ");
 											sb.append(msg);
-											sb.append("priority");
-											sb.append(priority);
 											msg = sb.toString();
 											out.println(msg);
 											out.flush();
 
+											System.out.println("Enter a priority for your request (10 for highest, 1 for lowest):");
+											boolean valid = false;
+											while (!valid) {
+												msg = sc.nextLine();
+												if (Integer.valueOf(msg) > 0 && Integer.valueOf(msg) < 11) {
+													priority = Integer.valueOf(msg);
+													StringBuffer sb1 = new StringBuffer();
+													out.write(Integer.valueOf(msg));
+													out.flush();
+													valid = true;
+												} else {
+													System.out.println("Enter a valid priority :(");
+												}
+											}
+
+											//Get price:
+											StringBuffer sb1 = new StringBuffer();
+											sb1.append("pricing ");
+											sb1.append(priority + " ");
+											sb1.append(input);
+											msg = sb1.toString();
+											out.println(msg);
+											out.flush();
+
+
 											try {
+												//Gets % profanity
 												System.out.println(in.readLine());
+
+												//Gets result of input string
 												System.out.println(in.readLine());
-												//System.out.println(in.readLine());
+
+												//Gets price of service
+												System.out.println(in.readLine());
 											} catch (IOException e) {
 												// TODO Auto-generated catch block
 												e.printStackTrace();
