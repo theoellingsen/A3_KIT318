@@ -14,6 +14,9 @@ import java.util.Scanner;
  * Client Handler class
  * Handles a new thread for each client created by the server. Can handle various input from the client 
  */
+
+//ADDING COMMENT TO TEST GITHUB REPOS.
+
 public class ClientHandler implements Runnable {
 	private Socket clientSocket; // The clients socket
 	private BufferedReader in; // Input
