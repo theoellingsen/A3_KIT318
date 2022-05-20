@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Scanner;
 
 /*
@@ -14,9 +16,6 @@ import java.util.Scanner;
  * Client Handler class
  * Handles a new thread for each client created by the server. Can handle various input from the client 
  */
-
-//ADDING COMMENT TO TEST GITHUB REPOS.
-
 public class ClientHandler implements Runnable {
 	private Socket clientSocket; // The clients socket
 	private BufferedReader in; // Input
@@ -30,9 +29,6 @@ public class ClientHandler implements Runnable {
 	//TODO
 	public boolean request;
 	public boolean status;
-	
-	
-	public int priority;
 	
 
 	//List of profane words for profanity filter, taken from https://github.com/MauriceButler/badwords/blob/master/array.js
@@ -58,6 +54,7 @@ public class ClientHandler implements Runnable {
 		Thread recieve = new Thread(new Runnable() {
 
 			String msg;
+			int deadline;
 
 			@Override
 			public void run() {
@@ -124,24 +121,13 @@ public class ClientHandler implements Runnable {
 								out.flush();
 							}
 						} else if (command.equalsIgnoreCase("submitrequest")) {
-							String message = msg.replace("SubmitRequest ", "");
-							//System.out.println(message);
-							out.write(profanity_filter(message));
-							out.flush();
-							
-							priority = in.read(); //TOADD
-							System.out.println(priority);
+							String premessage = msg.replace("SubmitRequest ", "");
+							Server.message_queue.add(premessage);
 						}
 						//User exits.
 						else if (command.equalsIgnoreCase("exit")) {
 							break;
-						} else if (command.equalsIgnoreCase("pricing")) {
-							String [] arr = msg.split(" ", 3);
-							System.out.println(arr[2]);
-							pricing(arr[2], Integer.valueOf(entries[1]));
-						}
-						
-						else {
+						} else {
 							msg = in.readLine();
 							command = entries[0];
 							entries = msg.split(" ");
@@ -168,18 +154,8 @@ public class ClientHandler implements Runnable {
 		recieve.start();
 	}
 
-	public static void pricing(String line, int priority) {
-		//System.out.println(line);
-		String[] arr = line.split(" ");
-		Double length = Double.valueOf(arr.length);
-		//System.out.println(length);
-		
-		Double D_priority = Double.valueOf(priority);
-		//System.out.println(D_priority);
-		
-		Double price = (Double.valueOf(0.01)*length*D_priority);
-		
-		out.println("The price of this service is: $" + String.format("%.2f", price) + "\n");
+	public void check_queued_message(String message) {
+		out.write(profanity_filter(message));
 		out.flush();
 	}
 
