@@ -80,55 +80,20 @@ public class Client {
 										} 
 
 										else if ("SubmitRequest".equalsIgnoreCase(line)) {
-											//TODO code for submit request.
-											int priority = 0;
-											System.out.println("Enter a string (future implementation will have text file path too) to be processed:");
-											msg = sc.nextLine();
-											String input = msg;
-											StringBuffer sb = new StringBuffer();
-											sb.append("SubmitRequest ");
-											sb.append(msg);
-											msg = sb.toString();
-											out.println(msg);
-											out.flush();
-
-											System.out.println("Enter a priority for your request (10 for highest, 1 for lowest):");
+											
+											System.out.println("Enter 'String' if you would like a String processed,\n"
+													+ "or 'txt' if you would like a .txt file processed.");
 											boolean valid = false;
 											while (!valid) {
 												msg = sc.nextLine();
-												if (Integer.valueOf(msg) > 0 && Integer.valueOf(msg) < 11) {
-													priority = Integer.valueOf(msg);
-													StringBuffer sb1 = new StringBuffer();
-													out.write(Integer.valueOf(msg));
-													out.flush();
+												
+												if (msg.equalsIgnoreCase("String")) {
+													stringProcess();
 													valid = true;
-												} else {
-													System.out.println("Enter a valid priority :(");
+												} else if (msg.equalsIgnoreCase("txt")) {
+													txtProcess();
+													valid = true;
 												}
-											}
-
-											//Get price:
-											StringBuffer sb1 = new StringBuffer();
-											sb1.append("pricing ");
-											sb1.append(priority + " ");
-											sb1.append(input);
-											msg = sb1.toString();
-											out.println(msg);
-											out.flush();
-
-
-											try {
-												//Gets % profanity
-												System.out.println(in.readLine());
-
-												//Gets result of input string
-												System.out.println(in.readLine());
-
-												//Gets price of service
-												System.out.println(in.readLine());
-											} catch (IOException e) {
-												// TODO Auto-generated catch block
-												e.printStackTrace();
 											}
 										}
 
@@ -242,6 +207,65 @@ public class Client {
 
 		System.out
 		.println("You are registered! Here are your details\nUsername: " + username + "\nPassword: " + password);
+	}
+	
+	public static void stringProcess() {
+		System.out.println("Enter the string you would like processed:");
+		
+		int priority = 0;
+		String msg = sc.nextLine();
+		String input = msg;
+		StringBuffer sb = new StringBuffer();
+		sb.append("SubmitRequest ");
+		sb.append(msg);
+		msg = sb.toString();
+		out.println(msg);
+		out.flush();
+
+		System.out.println("Enter a priority for your request (10 for highest, 1 for lowest):");
+		boolean valid = false;
+		while (!valid) {
+			msg = sc.nextLine();
+			if (Integer.valueOf(msg) > 0 && Integer.valueOf(msg) < 11) {
+				priority = Integer.valueOf(msg);
+				StringBuffer sb1 = new StringBuffer();
+				out.write(Integer.valueOf(msg));
+				out.flush();
+				valid = true;
+			} else {
+				System.out.println("Enter a valid priority :(");
+			}
+		}
+
+		//Get price:
+		StringBuffer sb1 = new StringBuffer();
+		sb1.append("pricing ");
+		sb1.append(priority + " ");
+		sb1.append(input);
+		msg = sb1.toString();
+		out.println(msg);
+		out.flush();
+
+
+		try {
+			//Gets % profanity
+			System.out.println(in.readLine());
+
+			//Gets result of input string
+			System.out.println(in.readLine());
+
+			//Gets price of service
+			System.out.println(in.readLine());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void txtProcess() {
+		//Not currently Working
+		//ServerFileReading.uploadfile();
+		System.out.println("TO DO, MAKE ServerFileReadign.uploadfile() work.");
 	}
 
 }

@@ -25,9 +25,9 @@ public class ServerFileReading {
 	public static void downloadFile() {
 		
 		try {
-          String host = "131.217.172.131";
+          String host = "203.101.226.13";
           String user = "ubuntu";
-          String privateKey = "C://Users/theoe/OneDrive - University of Tasmania/Sem 1 2022/KIT318 - Big Data and Cloud Computing/privatekey.ppk"; //please provide your ppk file
+          String privateKey = "C://Users/theoe/OneDrive - University of Tasmania/Sem 1 2022/KIT318 - Big Data and Cloud Computing/privatekey3.ppk"; //please provide your ppk file
           JSch jsch = new JSch();
           Session session = jsch.getSession(user, host, 22);
           Properties config = new Properties();
@@ -41,7 +41,7 @@ public class ServerFileReading {
           Channel channel = session.openChannel("sftp");
           channel.connect();
           ChannelSftp sftpChannel = (ChannelSftp) channel;
-          sftpChannel.get( "/home/ubuntu/ServerFileReading2.java","D:/testjars/ServerFileReading2.java");
+          sftpChannel.get( "/home/ubuntu/ServerFileReading2.java","D:/testjars/ServerFileReading3.java");
           
           sftpChannel.exit();
           session.disconnect();
@@ -57,9 +57,9 @@ public class ServerFileReading {
 	
 	public static void uploadfile() {
 	try {
-          String host = "131.217.172.131"; //Add IP
+          String host = "203.101.226.13"; //Add IP of vm
           String user = "ubuntu";
-          String privateKey = "C://Users/theoe/OneDrive - University of Tasmania/Sem 1 2022/KIT318 - Big Data and Cloud Computing/privatekey.ppk"; //please provide your ppk file
+          String privateKey = "C://Users/theoe/OneDrive - University of Tasmania/Sem 1 2022/KIT318 - Big Data and Cloud Computing/privatekey3.ppk"; //please provide your ppk file
           JSch jsch = new JSch();
           Session session = jsch.getSession(user, host, 22);
           Properties config = new Properties();
@@ -95,7 +95,7 @@ public class ServerFileReading {
 		// TODO Auto-generated method stub
 		
 		downloadFile();
-		//uploadfile();
+		uploadfile();
 
 	}
 
