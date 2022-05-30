@@ -15,10 +15,10 @@ public class Server {
 
 	public static ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>(); //A list of all clients connected to the server
 	
-	static class StringPriorityComparator implements Comparator<String> { // TODO: need to check this works once check_status is implemented
+	static class RequestPriorityComparator implements Comparator<Request> { // TODO: need to check this works once check_status is implemented
 		@Override
-		public int compare(String o1, String o2) {
-			if (Integer.parseInt(o1.split("priority")[1]) < Integer.parseInt(o2.split("priority")[1])) {
+		public int compare(Request o1, Request o2) {
+			if (o1.getPriority(o1) < o2.getPriority(o2)) {
 				return 0;
 			} else {
 				return 1;
@@ -26,7 +26,7 @@ public class Server {
 		}
 	}
 	
-	public static Queue<String> message_queue = new PriorityQueue<>(new StringPriorityComparator());
+	public static Queue<Request> message_queue = new PriorityQueue<>(new RequestPriorityComparator());
 
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket;
@@ -44,7 +44,8 @@ public class Server {
 			
 			// check profanity for head of the queue and then removes the node from the queue
 			if (!message_queue.isEmpty()) {
-				clientThread.check_queued_message(message_queue.poll().split("priority")[0]);
+				message_queue.poll().setStatus("processing");
+				clientThread.check_queued_message(message_queue.poll().getStringInput(message_queue.poll()));
 			}
 		}
 	}

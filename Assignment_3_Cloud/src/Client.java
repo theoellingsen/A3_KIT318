@@ -88,9 +88,13 @@ public class Client {
 												msg = sc.nextLine();
 												
 												if (msg.equalsIgnoreCase("String")) {
+													out.println(msg);
+													out.flush();
 													stringProcess();
 													valid = true;
 												} else if (msg.equalsIgnoreCase("txt")) {
+													out.println(msg);
+													out.flush();
 													txtProcess();
 													valid = true;
 												}
@@ -98,10 +102,16 @@ public class Client {
 										}
 
 										else if ("CheckStatus".equalsIgnoreCase(line)) {
-											//TODO code for status update
-											System.out.println("To implement!");
-											out.println(line); // Tells server to check status
-											out.flush();
+											boolean found = false;
+											for (Request r : Server.message_queue) {
+										        if(r.getUsername(r).equalsIgnoreCase(username)) {
+										        	found = true;
+										        	System.out.println("Status: " + r.getStatus(r));
+										        }
+											}
+											if(!found) {
+												System.out.println("Request not found!");
+											}
 										}
 										else {
 											System.out.println("'" + line
@@ -265,7 +275,7 @@ public class Client {
 	public static void txtProcess() {
 		//Not currently Working
 		//ServerFileReading.uploadfile();
-		System.out.println("TO DO, MAKE ServerFileReadign.uploadfile() work.");
+		System.out.println("TO DO, MAKE ServerFileReading.uploadfile() work.");
 	}
 
 }
