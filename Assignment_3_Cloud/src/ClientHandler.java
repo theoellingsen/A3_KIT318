@@ -3,15 +3,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.Scanner;
+
 
 /*
- * @author Theo Ellingsen
+ * @author Theo Ellingsen, Samuel ***, Kate Tanner, Josh ***
  * KIT318
  * Client Handler class
  * Handles a new thread for each client created by the server. Can handle various input from the client 
@@ -69,6 +65,7 @@ public class ClientHandler implements Runnable {
 					msg = " ";
 					msg = in.readLine();
 					while (msg != null) {
+						System.out.println(msg);
 
 						entries = msg.split(" ");
 						command = entries[0];
@@ -114,8 +111,8 @@ public class ClientHandler implements Runnable {
 						//Check a password for an existing user.
 						else if (command.equalsIgnoreCase("login_password")) {
 							//Check if password is correct for user.
-							System.out.println(entries[1]);
-							System.out.println(login_user.password);
+							//System.out.println(entries[1]);
+							//System.out.println(login_user.password);
 							if (login_user.password.equalsIgnoreCase(entries[1])) {
 								out.write(1); //Indicate to server the password is correct
 								out.flush();
@@ -125,31 +122,22 @@ public class ClientHandler implements Runnable {
 							}
 						} else if (command.equalsIgnoreCase("SubmitRequest")) {
 							
-							//In final product, this won't be here. Will need to be sent to queue first
 							
 							type = in.readLine();
 							System.out.println("Type :" + type);
 							priority = in.read();
 							System.out.println(priority);
 							
-							Request request = null;
-							
-							if (type.equalsIgnoreCase("string")) {
-								String premessage = msg.replace("SubmitRequest ", "");
-								request = new Request(username, type, ServerFileReading.downloadFile(premessage), "", deadline, Server.message_queue.size(), priority, "added", "", "");
-							} else if (type.equalsIgnoreCase("txt")) {
-								String premessage = msg.replace("SubmitRequest ", "");
-								request = new Request(username, type, premessage, "", deadline, Server.message_queue.size(), priority, "added", "", "");
-							}
-							
+							String premessage = msg.replace("SubmitRequest ", "");
+							Request request = new Request(username, type, premessage, "", deadline, Server.message_queue.size(), priority, "added", "", "");
 							Server.message_queue.add(request);
 							
-							System.out.println(Server.message_queue.peek().getStringInput());
+							System.out.println("added");
 							
 							//System.out.println("Hello");
 						}	else if (command.equalsIgnoreCase("pricing")) {
 							String [] arr = msg.split(" ", 3);
-							System.out.println(arr[2]);
+							//System.out.println(arr[2]);
 							pricing(arr[2], Integer.valueOf(entries[1]));
 						}
 						//User exits.
@@ -170,11 +158,13 @@ public class ClientHandler implements Runnable {
 					out.close();
 					clientSocket.close();
 				} catch (IOException e) {
-					out.close();
+					//out.close();
+					run();
 					//System.out.println("Client disconnected");
 					try {
 						clientSocket.close();
 					} catch (IOException e1) {
+						run();
 					}
 				}
 			}
