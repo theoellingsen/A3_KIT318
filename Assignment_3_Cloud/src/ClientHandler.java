@@ -136,6 +136,8 @@ public class ClientHandler implements Runnable {
 							Request request = new Request(username, type, premessage, "", deadline, Server.message_queue.size(), priority, "added", "", "");
 							Server.message_queue.add(request);
 							
+							System.out.println(Server.message_queue.peek().getStringInput());
+							
 							//System.out.println("Hello");
 						}	else if (command.equalsIgnoreCase("pricing")) {
 							String [] arr = msg.split(" ", 3);
@@ -188,8 +190,8 @@ public class ClientHandler implements Runnable {
 	}
 
 	public void check_queued_message(String message) {
-		System.out.println("Made it here;");
-		out.write(profanity_filter(message));
+		
+		out.println(profanity_filter(message));
 		out.flush();
 	}
 

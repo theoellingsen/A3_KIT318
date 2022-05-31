@@ -265,10 +265,12 @@ public class Client {
 			System.out.println(in.readLine());
 
 			//Gets result of input string
-			//System.out.println(in.readLine());
+			System.out.println(in.readLine());
 
 			//Gets price of service
-			//System.out.println(in.readLine());
+			System.out.println(in.readLine());
+			
+			System.out.println(in.readLine());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

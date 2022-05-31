@@ -4,3 +4,5 @@
 /Client$1.class
 /Server$RequestPriorityComparator.class
 /QueueThread.class
+/RequestQueue.class
+/Server$RequestQueue.class

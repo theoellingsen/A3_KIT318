@@ -11,8 +11,10 @@ import java.util.Queue;
  * KIT318
  * Server. Accepts new connections, and stores a list of current connections.
  */
-public class Server extends Thread{
+public class Server{
 	public static ClientHandler clientThread;
+	
+	public static Queue<Request> message_queue = new PriorityQueue<>(new RequestPriorityComparator());
 
 	public static ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>(); //A list of all clients connected to the server
 	
@@ -26,9 +28,27 @@ public class Server extends Thread{
 			}
 		}
 	}
-	
-	public static Queue<Request> message_queue = new PriorityQueue<>(new RequestPriorityComparator());
 
+	 static class RequestQueue implements Runnable {
+		
+		@Override
+		public void run() {
+			int i = 0;
+			while (true) {
+				i ++;
+				if (i % 1000 == 1) {
+					System.out.print("");
+				}
+				if (!message_queue.isEmpty()) {
+					//System.out.println(message_queue.peek().getStringInput());
+					//System.out.println("message queue in server main");
+					message_queue.peek().setStatus("processing");
+					clientThread.check_queued_message(message_queue.peek().getStringInput());
+				}
+			}
+		}
+	}
+	 
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket;
 		Socket clientSocket;
@@ -43,13 +63,9 @@ public class Server extends Thread{
 			
 			clientThread.run(); //Run the new thread
 			
-			while (true) {
-				if (!message_queue.isEmpty()) {
-					System.out.println("message queue in server main");
-					message_queue.poll().setStatus("processing");
-					clientThread.check_queued_message(message_queue.poll().getStringInput(message_queue.poll()));
-				}
-			}
+			Server.RequestQueue requestQueue = new Server.RequestQueue();
+			requestQueue.run();
+		
 		}
 	}
 	

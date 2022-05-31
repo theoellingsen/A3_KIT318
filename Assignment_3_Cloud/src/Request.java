@@ -42,7 +42,7 @@ public class Request {
         return type;
     }
     
-    public String getStringInput(Request r) {
+    public String getStringInput() {
         return stringInput;
     }
     
