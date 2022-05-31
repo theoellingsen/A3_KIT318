@@ -103,9 +103,9 @@ public class Client {
 										else if ("CheckStatus".equalsIgnoreCase(line)) {
 											boolean found = false;
 											for (Request r : Server.message_queue) {
-										        if(r.getUsername(r).equalsIgnoreCase(username)) {
+										        if(r.getUsername().equalsIgnoreCase(username)) {
 										        	found = true;
-										        	System.out.println("Status: " + r.getStatus(r));
+										        	System.out.println("Status: " + r.getStatus());
 										        }
 											}
 											if(!found) {

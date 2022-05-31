@@ -21,7 +21,7 @@ public class Server{
 	static class RequestPriorityComparator implements Comparator<Request> { // TODO: need to check this works once check_status is implemented
 		@Override
 		public int compare(Request o1, Request o2) {
-			if (o1.getPriority(o1) < o2.getPriority(o2)) {
+			if (o1.getPriority() < o2.getPriority()) {
 				return 0;
 			} else {
 				return 1;

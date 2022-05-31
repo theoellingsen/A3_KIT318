@@ -1,8 +1,8 @@
 /*
  * @author Joshua Perrin
  * KIT318
- * Request class definition
- * Defines the request object type
+ * class definition
+ * Defines the object type
  */
 
 public class Request {
@@ -18,7 +18,7 @@ public class Request {
     private String stringOutput;
     private String outputFilename;
 	
-	//request constructor
+	//constructor
     public Request(String requestingUsername, String type, String stringInput, String inputFilename, 
     		int deadline, int code, int priority, String status, String stringOutput, String outputFilename) {
 
@@ -34,11 +34,11 @@ public class Request {
         this.outputFilename = outputFilename;
     }
     
-    public String getUsername(Request r) {
+    public String getUsername() {
         return requestingUsername;
     }
     
-    public String getType(Request r) {
+    public String getType() {
         return type;
     }
     
@@ -46,23 +46,23 @@ public class Request {
         return stringInput;
     }
     
-    public String getInputFilename(Request r) {
+    public String getInputFilename() {
         return inputFilename;
     }
     
-    public int getDeadline(Request r) {
+    public int getDeadline() {
         return deadline;
     }
     
-    public int getCode(Request r) {
+    public int getCode() {
         return code;
     }
     
-    public int getPriority(Request r) {
+    public int getPriority() {
         return priority;
     }
     
-    public String getStatus(Request r) {
+    public String getStatus() {
         return status;
     }
     
@@ -70,11 +70,11 @@ public class Request {
         status = s;
     }
     
-    public String getStringOutput(Request r) {
+    public String getStringOutput() {
         return stringOutput;
     }
     
-    public String getOutputFilename(Request r) {
+    public String getOutputFilename() {
         return outputFilename;
     }
 }
