@@ -4,6 +4,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
 
 /*
  * @author Theo Ellingsen, Samuel ***, Kate Tanner, Josh ***
@@ -89,12 +95,15 @@ public class Client {
 												msg = sc.nextLine();
 
 												if (msg.equalsIgnoreCase("String")) {
-													stringProcess();
+													System.out.println("Enter the string you would like processed:");
+													String user_message = sc.nextLine();
+													stringProcess(user_message, "string");
 													valid = true;
 												} else if (msg.equalsIgnoreCase("txt")) {
-													out.println(msg + "\n");
-													out.flush();
-													txtProcess();
+													System.out.println("Enter the file path:");
+													String file_path = sc.nextLine();
+													ServerFileReading.uploadfile(file_path);
+													stringProcess(file_path, "txt");
 													valid = true;
 												}
 											}
@@ -248,11 +257,10 @@ public class Client {
 		.println("You are registered! Here are your details\nUsername: " + username + "\nPassword: " + password);
 	}
 
-	public static void stringProcess() {
-		System.out.println("Enter the string you would like processed:");
+	public static void stringProcess(String user_input, String type) {
 
 		int priority = 0;
-		String msg = sc.nextLine();
+		String msg = user_input;
 		String input = msg;
 		StringBuffer sb = new StringBuffer();
 		sb.append("SubmitRequest ");
@@ -262,7 +270,7 @@ public class Client {
 		out.println(msg);
 		out.flush();
 
-		out.println("string");
+		out.println(type);
 		out.flush();
 
 		System.out.println("Enter a priority for your request (10 for highest, 1 for lowest):");
@@ -289,12 +297,6 @@ public class Client {
 		out.println(msg);
 		out.flush();
 
-	}
-
-	public static void txtProcess() {
-		//Not currently Working
-		//ServerFileReading.uploadfile();
-		System.out.println("TO DO, MAKE ServerFileReading.uploadfile() work.");
 	}
 
 }

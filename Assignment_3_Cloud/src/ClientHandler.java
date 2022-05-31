@@ -128,13 +128,18 @@ public class ClientHandler implements Runnable {
 							priority = in.read();
 							System.out.println(priority);
 							
-							String premessage = msg.replace("SubmitRequest ", "");
-							Request request = new Request(username, type, premessage, "", deadline, Server.message_queue.size(), priority, "added", "", "");
+							Request request = null;
+
+							if (type.equalsIgnoreCase("txt")) {
+								String premessage = msg.replace("SubmitRequest ", "");
+								request = new Request(username, type, ServerFileReading.downloadFile(premessage), "", deadline, Server.message_queue.size(), priority, "added", "", "");
+							} else if (type.equalsIgnoreCase("string")) {
+								String premessage = msg.replace("SubmitRequest ", "");
+								request = new Request(username, type, premessage, "", deadline, Server.message_queue.size(), priority, "added", "", "");
+							}
 							Server.message_queue.add(request);
-							
-							System.out.println("added");
-							
-							//System.out.println("Hello");
+
+							System.out.println(Server.message_queue.peek().getStringInput());
 						}	else if (command.equalsIgnoreCase("pricing")) {
 							String [] arr = msg.split(" ", 3);
 							//System.out.println(arr[2]);
