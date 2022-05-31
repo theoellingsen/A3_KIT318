@@ -123,7 +123,16 @@ public class Client {
 										}
 
 										else if ("Delete".equalsIgnoreCase(line)) {
-											System.out.println("To Add: Delete functionality");
+											boolean found = false;
+											for (Request r : Server.message_queue) {
+												if(r.getUsername().equalsIgnoreCase(username)) {
+													found = true;
+													Server.message_queue.remove(r);
+												}
+											}
+											if(!found) {
+												System.out.println("Request not found!");
+											}
 										}
 										else {
 											System.out.println("'" + line
