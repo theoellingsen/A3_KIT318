@@ -128,9 +128,10 @@ public class ClientHandler implements Runnable {
 							//In final product, this won't be here. Will need to be sent to queue first
 							String message = msg.replace("SubmitRequest ", "");
 							System.out.println(message);
-							out.write(profanity_filter(message));
+							out.println(profanity_filter(message));
 							out.flush();
-
+							
+							
 							type = in.readLine();
 							priority = in.read();
 							System.out.println(priority);
@@ -242,7 +243,7 @@ public class ClientHandler implements Runnable {
 		//Calculate profane %
 		double percent_profane = (num_profane/Double.valueOf(sent.length))*100;
 		try {
-			out.println("This entry contains " + String.format("%.2f", percent_profane) + "% profanity.");
+			out.println("This entry contains " + String.format("%.2f", percent_profane) + "% profanity.\n");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

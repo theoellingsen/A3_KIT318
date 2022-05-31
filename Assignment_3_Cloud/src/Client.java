@@ -88,12 +88,12 @@ public class Client {
 												msg = sc.nextLine();
 												
 												if (msg.equalsIgnoreCase("String")) {
-													out.println(msg);
+													out.println(msg + "\n");
 													out.flush();
 													stringProcess();
 													valid = true;
 												} else if (msg.equalsIgnoreCase("txt")) {
-													out.println(msg);
+													out.println(msg + "\n");
 													out.flush();
 													txtProcess();
 													valid = true;
