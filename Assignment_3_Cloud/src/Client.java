@@ -88,8 +88,7 @@ public class Client {
 												msg = sc.nextLine();
 												
 												if (msg.equalsIgnoreCase("String")) {
-													out.println(msg + "\n");
-													out.flush();
+													
 													stringProcess();
 													valid = true;
 												} else if (msg.equalsIgnoreCase("txt")) {
@@ -214,6 +213,7 @@ public class Client {
 		msg = sb3.toString();
 		out.println(msg);
 		out.flush();
+		
 
 		System.out
 		.println("You are registered! Here are your details\nUsername: " + username + "\nPassword: " + password);
@@ -232,6 +232,9 @@ public class Client {
 		out.println(msg);
 		out.flush();
 
+		out.println("string");
+		out.flush();
+		
 		System.out.println("Enter a priority for your request (10 for highest, 1 for lowest):");
 		boolean valid = false;
 		while (!valid) {
@@ -253,7 +256,7 @@ public class Client {
 		sb1.append(priority + " ");
 		sb1.append(input);
 		msg = sb1.toString();
-		out.println(msg);
+		out.println(msg + "\n");
 		out.flush();
 
 
@@ -262,10 +265,10 @@ public class Client {
 			System.out.println(in.readLine());
 
 			//Gets result of input string
-			System.out.println(in.readLine());
+			//System.out.println(in.readLine());
 
 			//Gets price of service
-			System.out.println(in.readLine());
+			//System.out.println(in.readLine());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

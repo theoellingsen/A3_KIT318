@@ -126,20 +126,17 @@ public class ClientHandler implements Runnable {
 						} else if (command.equalsIgnoreCase("SubmitRequest")) {
 							
 							//In final product, this won't be here. Will need to be sent to queue first
-							String message = msg.replace("SubmitRequest ", "");
-							System.out.println(message);
-							out.println(profanity_filter(message));
-							out.flush();
-							
 							
 							type = in.readLine();
+							System.out.println("Type :" + type);
 							priority = in.read();
 							System.out.println(priority);
-							//Keep this bit to keep it from breaking pretty much.
 							
 							String premessage = msg.replace("SubmitRequest ", "");
 							Request request = new Request(username, type, premessage, "", deadline, Server.message_queue.size(), priority, "added", "", "");
 							Server.message_queue.add(request);
+							
+							//System.out.println("Hello");
 						}	else if (command.equalsIgnoreCase("pricing")) {
 							String [] arr = msg.split(" ", 3);
 							System.out.println(arr[2]);
@@ -191,6 +188,7 @@ public class ClientHandler implements Runnable {
 	}
 
 	public void check_queued_message(String message) {
+		System.out.println("Made it here;");
 		out.write(profanity_filter(message));
 		out.flush();
 	}

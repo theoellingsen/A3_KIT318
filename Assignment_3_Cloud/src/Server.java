@@ -11,7 +11,8 @@ import java.util.Queue;
  * KIT318
  * Server. Accepts new connections, and stores a list of current connections.
  */
-public class Server {
+public class Server extends Thread{
+	public static ClientHandler clientThread;
 
 	public static ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>(); //A list of all clients connected to the server
 	
@@ -37,16 +38,20 @@ public class Server {
 			//System.out.println("Waiting for connection");
 			clientSocket = serverSocket.accept(); //Accept requested connection from client
 			//System.out.println("Connection accepted");
-			ClientHandler clientThread = new ClientHandler(clientSocket, clients); //Create a new thread for the client
+			clientThread = new ClientHandler(clientSocket, clients); //Create a new thread for the client
 			clients.add(clientThread); //Add the client to the ArrayList of clients
 			
 			clientThread.run(); //Run the new thread
 			
-			// check profanity for head of the queue and then removes the node from the queue
-			if (!message_queue.isEmpty()) {
-				message_queue.poll().setStatus("processing");
-				clientThread.check_queued_message(message_queue.poll().getStringInput(message_queue.poll()));
+			while (true) {
+				if (!message_queue.isEmpty()) {
+					System.out.println("message queue in server main");
+					message_queue.poll().setStatus("processing");
+					clientThread.check_queued_message(message_queue.poll().getStringInput(message_queue.poll()));
+				}
 			}
 		}
 	}
+	
+	
 }
