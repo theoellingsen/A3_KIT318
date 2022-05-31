@@ -31,6 +31,7 @@ public class ClientHandler implements Runnable {
 	public boolean status;
 	
 	public int priority;
+	public String type;
 	
 
 	//List of profane words for profanity filter, taken from https://github.com/MauriceButler/badwords/blob/master/array.js
@@ -122,8 +123,7 @@ public class ClientHandler implements Runnable {
 								out.write(0); //Indicate to server that password is incorrect
 								out.flush();
 							}
-						} else if (command.equalsIgnoreCase("submitrequest")) {
-							
+						} else if (command.equalsIgnoreCase("SubmitRequest")) {
 							
 							//In final product, this won't be here. Will need to be sent to queue first
 							String message = msg.replace("SubmitRequest ", "");
@@ -131,12 +131,14 @@ public class ClientHandler implements Runnable {
 							out.write(profanity_filter(message));
 							out.flush();
 
+							type = in.readLine();
 							priority = in.read();
 							System.out.println(priority);
 							//Keep this bit to keep it from breaking pretty much.
 							
 							String premessage = msg.replace("SubmitRequest ", "");
-							Server.message_queue.add(premessage);
+							Request request = new Request(username, type, premessage, "", deadline, Server.message_queue.size(), priority, "added", "", "");
+							Server.message_queue.add(request);
 						}	else if (command.equalsIgnoreCase("pricing")) {
 							String [] arr = msg.split(" ", 3);
 							System.out.println(arr[2]);
