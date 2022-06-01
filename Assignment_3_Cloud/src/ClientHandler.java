@@ -132,18 +132,68 @@ public class ClientHandler implements Runnable {
 
 							if (type.equalsIgnoreCase("txt")) {
 								String premessage = msg.replace("SubmitRequest ", "");
-								request = new Request(username, type, ServerFileReading.downloadFile(premessage), "", deadline, Server.message_queue.size(), priority, "added", "", "");
+								request = new Request(username, type, ServerFileReading.downloadFile(premessage), "", deadline, -1, priority, "added", "", "");
 							} else if (type.equalsIgnoreCase("string")) {
 								String premessage = msg.replace("SubmitRequest ", "");
-								request = new Request(username, type, premessage, "", deadline, Server.message_queue.size(), priority, "added", "", "");
+								request = new Request(username, type, premessage, "", deadline, -1, priority, "added", "", "");
 							}
 							Server.message_queue.add(request);
 
-							System.out.println(Server.message_queue.peek().getStringInput());
 						}	else if (command.equalsIgnoreCase("pricing")) {
 							String [] arr = msg.split(" ", 3);
 							//System.out.println(arr[2]);
 							pricing(arr[2], Integer.valueOf(entries[1]));
+						}
+						else if (command.equalsIgnoreCase("CheckStatus")) {			
+							boolean found = false;
+							for (Request r : Server.message_queue) { // Check status of all requests in the queue
+								if(r.getUsername().equalsIgnoreCase(username)) {
+									found = true;
+									out.println("Status of \"" + r.getStringInput() + "\": " + r.getStatus());
+									out.flush();
+								}
+							}
+							if(!found) {
+								out.println("No requests found!");
+							}
+						}
+						else if (command.equalsIgnoreCase("Delete")) {			
+							boolean found = false;
+							boolean first_request_found = false;
+							int i = 0;
+							int deletion_code = -1;
+							
+							for (Request r : Server.message_queue) { // Delete a request from the the queue
+								if(r.getUsername().equalsIgnoreCase(username)) {
+									i++;
+									found = true;
+									if (!first_request_found) {
+										out.println("Please enter the number corresponding to the request you want to delete:");
+										first_request_found = true;
+									}
+									out.println(i + ": \"" + r.getStringInput() + "\" (Status: " +  r.getStatus() + ")");
+									r.setCode(i);
+								}
+							}
+							if(!found) {
+								out.println("You have no current requests in the queue.");
+							}
+							out.flush();
+							
+							deletion_code = in.read();
+							found = false;
+							
+							for (Request r : Server.message_queue) {
+								if(r.getUsername().equalsIgnoreCase(username) && r.getCode() == deletion_code) {
+									found = true;
+									Server.message_queue.remove(r);
+									out.println("Request successfully deleted!");
+								}
+							}
+							if(!found) {
+								out.println("Request not found!");
+							}
+							out.flush();
 						}
 						//User exits.
 						else if (command.equalsIgnoreCase("exit")) {

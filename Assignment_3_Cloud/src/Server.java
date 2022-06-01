@@ -46,7 +46,7 @@ public class Server{
 					}
 					if (!message_queue.isEmpty()) {
 						message_queue.peek().setStatus("processing");
-						clientThread.check_queued_message(message_queue.poll().getStringInput());
+						//clientThread.check_queued_message(message_queue.poll().getStringInput());
 					}
 				}
 			} catch (UnhandledException e) {

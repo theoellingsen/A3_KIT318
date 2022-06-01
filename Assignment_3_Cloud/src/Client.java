@@ -110,28 +110,23 @@ public class Client {
 										}
 
 										else if ("CheckStatus".equalsIgnoreCase(line)) {
-											boolean found = false;
-											for (Request r : Server.message_queue) {
-												if(r.getUsername().equalsIgnoreCase(username)) {
-													found = true;
-													System.out.println("Status: " + r.getStatus());
-												}
-											}
-											if(!found) {
-												System.out.println("Request not found!");
-											}
+											out.println("CheckStatus");
+											out.flush();
 										}
-
 										else if ("Delete".equalsIgnoreCase(line)) {
-											boolean found = false;
-											for (Request r : Server.message_queue) {
-												if(r.getUsername().equalsIgnoreCase(username)) {
-													found = true;
-													Server.message_queue.remove(r);
+											out.println("Delete");
+											out.flush();
+											
+											boolean valid = false;
+											while (!valid) {
+												msg = sc.nextLine();
+												if (Integer.valueOf(msg) > 0) {
+													out.write(Integer.valueOf(msg));
+													out.flush();
+													valid = true;
+												} else {
+													System.out.println("Enter a valid index!");
 												}
-											}
-											if(!found) {
-												System.out.println("Request not found!");
 											}
 										}
 										else {

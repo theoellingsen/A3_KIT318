@@ -70,6 +70,10 @@ public class Request {
         status = s;
     }
     
+    public void setCode(int c) {
+        code = c;
+    }
+    
     public String getStringOutput() {
         return stringOutput;
     }
