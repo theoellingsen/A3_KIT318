@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 
 /*
- * @author Theo Ellingsen, Samuel ***, Kate Tanner, Josh ***
+ * @author Theo Ellingsen, Samuel Hoskin-Newell, Kate Tanner, Joshua Perrin
  * KIT318
  * Client Handler class
- * Handles a new thread for each client created by the server. Can handle various input from the client 
+ * Handles a new thread for each client created by the server. Can handle various input from the client. 
  */
 public class ClientHandler implements Runnable {
 	private Socket clientSocket; // The clients socket
