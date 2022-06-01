@@ -14,7 +14,7 @@ import com.jcraft.jsch.SftpException;
 /*
  * @author Theo Ellingsen, Samuel Hoskin-Newell, Kate Tanner, Joshua Perrin
  * KIT318
- * Connects a client to the server, and performs local actions based on server communication.
+ * Connects a client to the server and performs local actions based on server communication.
  */
 public class Client {
 	public static boolean usernameEntered = false; // Has the user entered their details yet?
