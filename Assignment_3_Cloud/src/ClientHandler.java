@@ -1,4 +1,6 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -121,7 +123,8 @@ public class ClientHandler implements Runnable {
 								out.flush();
 							}
 						} else if (command.equalsIgnoreCase("SubmitRequest")) {
-							
+							String filename = in.readLine();
+							System.out.println(filename);
 							
 							type = in.readLine();
 							System.out.println("Type :" + type);
@@ -132,7 +135,7 @@ public class ClientHandler implements Runnable {
 
 							if (type.equalsIgnoreCase("txt")) {
 								String premessage = msg.replace("SubmitRequest ", "");
-								request = new Request(username, type, ServerFileReading.downloadFile(premessage), "", deadline, -1, priority, "added", "", "");
+								request = new Request(username, type, premessage, filename, deadline, -1, priority, "added", "", "");
 							} else if (type.equalsIgnoreCase("string")) {
 								String premessage = msg.replace("SubmitRequest ", "");
 								request = new Request(username, type, premessage, "", deadline, -1, priority, "added", "", "");
@@ -242,9 +245,24 @@ public class ClientHandler implements Runnable {
 		out.flush();
 	}
 
-	public void check_queued_message(String message) {
+	public void check_queued_message(Request request) {
 		
-		out.println(profanity_filter(message));
+		String outputString = profanity_filter(request.getStringInput());
+		
+		out.println(outputString);
+		
+		// Writes processed text to file
+		if (!request.getInputFilename().isEmpty()) {
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(request.getInputFilename()));
+				bw.write(outputString.replace("The result of your input String is: ", ""));
+				bw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		out.flush();
 	}
 

@@ -1,4 +1,7 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -97,13 +100,33 @@ public class Client {
 												if (msg.equalsIgnoreCase("String")) {
 													System.out.println("Enter the string you would like processed:");
 													String user_message = sc.nextLine();
-													stringProcess(user_message, "string");
+													stringProcess(user_message, "", "string");
 													valid = true;
 												} else if (msg.equalsIgnoreCase("txt")) {
 													System.out.println("Enter the file path:");
 													String file_path = sc.nextLine();
-													ServerFileReading.uploadfile(file_path);
-													stringProcess(file_path, "txt");
+													
+													File file = new File(file_path);
+													
+													BufferedReader br;
+													String st;
+													StringBuffer sb = new StringBuffer();
+													try {
+														br = new BufferedReader(new FileReader(file));
+														
+														while ((st = br.readLine()) != null) {
+															sb.append(st); // + "\n"
+														}
+													
+													} catch (FileNotFoundException e) {
+														// TODO Auto-generated catch block
+														e.printStackTrace();
+													} catch (IOException e) {
+														// TODO Auto-generated catch block
+														e.printStackTrace();
+													}
+										 
+													stringProcess(sb.toString(), file_path, "txt");
 													valid = true;
 												}
 											}
@@ -256,12 +279,11 @@ public class Client {
 		out.println(msg);
 		out.flush();
 
-
 		System.out
 		.println("You are registered! Here are your details\nUsername: " + username + "\nPassword: " + password);
 	}
 
-	public static void stringProcess(String user_input, String type) {
+	public static void stringProcess(String user_input, String filename, String type) {
 
 		int priority = 0;
 		String msg = user_input;
@@ -272,6 +294,9 @@ public class Client {
 		msg = sb.toString();
 		System.out.println(msg);
 		out.println(msg);
+		out.flush();
+		
+		out.println(filename);
 		out.flush();
 
 		out.println(type);

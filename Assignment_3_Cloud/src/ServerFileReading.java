@@ -20,14 +20,16 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 public class ServerFileReading {
+	
+	public static String cloud_ip;
 
 	public static String downloadFile(String filename) {
 		String file_contents = null;
 		
 		try {
-          String host = "203.101.226.13";
+          String host = cloud_ip;
           String user = "ubuntu";
-          String privateKey = "C://Users/theoe/OneDrive - University of Tasmania/Sem 1 2022/KIT318 - Big Data and Cloud Computing/privatekey3.ppk"; //please provide your ppk file
+          String privateKey = "id_rsa.ppk"; //please provide your ppk file
           JSch jsch = new JSch();
           Session session = jsch.getSession(user, host, 22);
           Properties config = new Properties();
@@ -42,6 +44,8 @@ public class ServerFileReading {
           channel.connect();
           ChannelSftp sftpChannel = (ChannelSftp) channel;
           
+          
+          // Converts file to String
           InputStream stream = sftpChannel.get("/home/ubuntu/" + filename);
           StringBuffer sb = new StringBuffer();
           try {
@@ -74,9 +78,9 @@ public class ServerFileReading {
 	
 	public static void uploadfile(String file_path) {
 	try {
-          String host = "203.101.226.13"; //Add IP of vm
-          String user = "ubuntu";
-          String privateKey = "C://Users/theoe/OneDrive - University of Tasmania/Sem 1 2022/KIT318 - Big Data and Cloud Computing/privatekey3.ppk"; //please provide your ppk file
+          String host = cloud_ip; //Add IP of vm
+          String user = "samuel";
+          String privateKey = "id_rsa.ppk"; //please provide your ppk file
           JSch jsch = new JSch();
           Session session = jsch.getSession(user, host, 22);
           Properties config = new Properties();
@@ -91,7 +95,6 @@ public class ServerFileReading {
           channel.connect();
           ChannelSftp sftpChannel = (ChannelSftp) channel;
           sftpChannel.put(file_path, "/home/ubuntu/" + file_path.split("/")[file_path.split("/").length -1]); // Finds the file name in the directory after the last '/' character
-          // If not working, perhaps change to '\'
           
           System.out.println("done");
 
@@ -106,15 +109,5 @@ public class ServerFileReading {
       	   System.out.println(e);
 		}   
 	}
-
-	
-	
-	/*public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		downloadFile();
-		uploadfile();
-
-	}*/
 
 }

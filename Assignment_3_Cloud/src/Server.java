@@ -19,7 +19,7 @@ public class Server{
 
 	public static ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>(); //A list of all clients connected to the server
 
-	static class RequestPriorityComparator implements Comparator<Request> { // TODO: need to check this works once check_status is implemented
+	static class RequestPriorityComparator implements Comparator<Request> {
 		@Override
 		public int compare(Request o1, Request o2) {
 			if (o1.getPriority() < o2.getPriority()) {
@@ -30,8 +30,6 @@ public class Server{
 		}
 	}
 
-
-
 	static class RequestQueue implements Runnable {
 
 		@Override
@@ -39,17 +37,24 @@ public class Server{
 			try {
 				int i = 0;
 				while (true) {
-					//DO NOT DELETE iterating I! REQUIRED FOR CODE TO WORK?
+					//DO NOT DELETE iterating I!
 					i ++;
 					if (i % 1000 == 1) {
 						System.out.print("");
 					}
 					if (!message_queue.isEmpty()) {
 						message_queue.peek().setStatus("processing");
-						//clientThread.check_queued_message(message_queue.poll().getStringInput());
+						
+						try {
+							Thread.sleep(30000); // wait 30 secs to process string
+						} catch( InterruptedException e) {
+							e.printStackTrace();
+						}
+						
+						clientThread.check_queued_message(message_queue.poll());
 					}
 				}
-			} catch (UnhandledException e) {
+			} catch (UnhandledException e) { // Node failure handling
 				System.out.println("Error. Restarting worker node.");
 				run();
 			}
@@ -61,6 +66,29 @@ public class Server{
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket;
 		Socket clientSocket;
+		
+		// Note: Uncomment following code to create and a delete a NectarCloud instance.
+		
+		/*CloudTutorial openstack =new CloudTutorial();//Build the  -openstack client and authenticate
+        openstack.getflavors();
+				String[] serverDets = openstack.createServer();//Creating a new VM
+		String serverIP=serverDets[0];
+		String serverid=serverDets[1];
+		String test2=openstack.getIP(serverid);
+		System.out.println("IP "+serverIP+" "+test2);
+		System.out.println(" Successfully Created Virtual Machine(VM) with server id"+ serverid +" and temp folder inside VM Please log in to nectar cloud to verify ");
+		
+		ServerFileReading.cloud_ip = test2; // sets host ip for downloading/uploading files
+		
+		ServerFileReading.uploadfile("~/Desktop/test_text.txt");
+		
+		try {
+			Thread.sleep(300000);//wait for 5 minutes to create VM
+		} catch( InterruptedException e) {
+			e.printStackTrace();
+		}
+		openstack.deleteServer(serverid);//Delete the created server
+		System.out.println(" Successfully deleted Virtual Machine(VM) of server id"+ serverid);*/
 
 		serverSocket = new ServerSocket(6150); //Open server socket on localhost port 6150
 		while (true) {
@@ -74,7 +102,6 @@ public class Server{
 
 			Server.RequestQueue requestQueue = new Server.RequestQueue();
 			requestQueue.run();
-
 		}
 	}
 }
