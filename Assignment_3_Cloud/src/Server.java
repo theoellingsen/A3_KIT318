@@ -8,9 +8,9 @@ import java.util.Queue;
 import org.jboss.resteasy.spi.UnhandledException;
 
 /*
- * @author Theo Ellingsen, Samuel Hoskin-Newell, Kate Tanner, Joshua Perrin
+ * @author Theo Ellingsen, Samuel ***, Kate Tanner, Josh ***
  * KIT318
- * Server. Accepts new connections and stores a list of current connections.
+ * Server. Accepts new connections, and stores a list of current connections.
  */
 public class Server{
 	public static ClientHandler clientThread;

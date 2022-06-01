@@ -21,8 +21,8 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 public class ServerFileReading {
 
-	
-	public static void downloadFile() {
+	public static String downloadFile(String filename) {
+		String file_contents = null;
 		
 		try {
           String host = "203.101.226.13";
@@ -41,7 +41,22 @@ public class ServerFileReading {
           Channel channel = session.openChannel("sftp");
           channel.connect();
           ChannelSftp sftpChannel = (ChannelSftp) channel;
-          sftpChannel.get( "/home/ubuntu/ServerFileReading2.java","D:/testjars/ServerFileReading3.java");
+          
+          InputStream stream = sftpChannel.get("/home/ubuntu/" + filename);
+          StringBuffer sb = new StringBuffer();
+          try {
+              BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+              
+              String line;
+              
+              while ((line = br.readLine()) != null) {
+            	  sb.append(line);
+              }
+            
+              file_contents = sb.toString();
+          } finally {
+              stream.close();
+          }
           
           sftpChannel.exit();
           session.disconnect();
@@ -52,10 +67,12 @@ public class ServerFileReading {
       }
 		catch(Exception e){
       	   System.out.println(e);
-		}   
+		}
+		
+		return file_contents;
 	}
 	
-	public static void uploadfile() {
+	public static void uploadfile(String file_path) {
 	try {
           String host = "203.101.226.13"; //Add IP of vm
           String user = "ubuntu";
@@ -73,8 +90,9 @@ public class ServerFileReading {
           Channel channel = session.openChannel("sftp");
           channel.connect();
           ChannelSftp sftpChannel = (ChannelSftp) channel;
-          sftpChannel.put("C://Users/theoe/OneDrive - University of Tasmania/Sem 1 2022/KIT318 - Big Data and Cloud Computing/ServerFileReading.java", "/home/ubuntu/ServerFileReading2.java");
-         
+          sftpChannel.put(file_path, "/home/ubuntu/" + file_path.split("/")[file_path.split("/").length -1]); // Finds the file name in the directory after the last '/' character
+          // If not working, perhaps change to '\'
+          
           System.out.println("done");
 
           sftpChannel.exit();
@@ -91,12 +109,12 @@ public class ServerFileReading {
 
 	
 	
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
 		downloadFile();
 		uploadfile();
 
-	}
+	}*/
 
 }
